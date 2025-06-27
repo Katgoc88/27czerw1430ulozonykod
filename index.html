@@ -4071,34 +4071,36 @@ function searchHighlight() {
   const input = document.getElementById("search-input").value.trim().toLowerCase();
   if (!input) return;
 
-  const body = document.body;
-  const walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
     acceptNode: node => {
-      if (node.nodeValue.trim().toLowerCase().includes(input)) return NodeFilter.FILTER_ACCEPT;
+      if (node.parentNode && node.parentNode.nodeName !== "SCRIPT" && node.nodeValue.toLowerCase().includes(input)) {
+        return NodeFilter.FILTER_ACCEPT;
+      }
     }
   });
 
   let node;
-  while (node = walker.nextNode()) {
-    const span = document.createElement("span");
-    span.className = "highlighted-match";
-    span.style.backgroundColor = "#ffff00";
-    span.textContent = node.nodeValue;
+  while ((node = walker.nextNode())) {
+    const originalText = node.nodeValue;
     const regex = new RegExp(`(${input})`, "gi");
-    const parts = node.nodeValue.split(regex);
+    const parts = originalText.split(regex);
+
+    if (parts.length < 2) continue;
+
     const frag = document.createDocumentFragment();
     parts.forEach(part => {
       if (part.toLowerCase() === input) {
         const mark = document.createElement("mark");
+        mark.className = "highlighted-match";
         mark.textContent = part;
         mark.style.backgroundColor = "#ffeb3b";
-        mark.className = "highlighted-match";
-        frag.appendChild(mark);
         matches.push(mark);
+        frag.appendChild(mark);
       } else {
         frag.appendChild(document.createTextNode(part));
       }
     });
+
     node.parentNode.replaceChild(frag, node);
   }
 
@@ -4113,15 +4115,18 @@ function searchHighlight() {
 
 function clearHighlights() {
   matches.forEach(el => {
-    const text = document.createTextNode(el.textContent);
-    el.parentNode.replaceChild(text, el);
+    const parent = el.parentNode;
+    parent.replaceChild(document.createTextNode(el.textContent), el);
+    parent.normalize(); // scal teksty
   });
   matches = [];
   document.getElementById("result-count").textContent = "0/0";
 }
 
 function scrollToMatch() {
-  if (matches.length > 0) matches[currentIndex].scrollIntoView({ behavior: "smooth", block: "center" });
+  if (matches.length > 0) {
+    matches[currentIndex].scrollIntoView({ behavior: "smooth", block: "center" });
+  }
 }
 
 function nextMatch() {
@@ -4142,7 +4147,6 @@ function updateCounter() {
   document.getElementById("result-count").textContent = `${currentIndex + 1}/${matches.length}`;
 }
 </script>
-
 
 
 
