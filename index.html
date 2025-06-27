@@ -160,156 +160,125 @@ body {
   
 <!-- ░░░░░░░░░░░░░░░░░░░░TU ZACZYNA SIĘ GŁÓWNY KONTENER░░░░░░░░░░░░░░░░░░░ -->
 
-  <!-- ░░░░░STYL░░░░░░░░ TABELA: katgo-table-2x2 ░░░░░░░░░░░░░░░░░░░░ -->
-
+ <!-- ░░░░░STYL░░░░░░░░ TABELA: katgo-table-2x2 ░░░░░░░░░░░░░░░░░░░░ -->
 <style>
-.katgo-projects-table {
+.katgo-table-2x2 {
   width: 100%;
   border-collapse: collapse;
   font-family: 'Segoe UI', sans-serif;
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  table-layout: fixed;
+  margin-top: 20px;
 }
-
-.katgo-projects-table th, 
-.katgo-projects-table td {
+.katgo-table-2x2 td {
   border: 1px solid #aebdc9;
-  padding: 4px;
-  vertical-align: middle;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.katgo-projects-table th {
+  padding: 8px;
   text-align: center;
-  cursor: pointer;
-  user-select: none;
+  vertical-align: middle;
 }
-
-.katgo-projects-table td {
-  text-align: left;
+.katgo-table-2x2 td:first-child {
+  width: 70%;
 }
-
-/* Precyzyjne szerokości tylko dla tej tabeli */
-.katgo-projects-table th:nth-child(1),
-.katgo-projects-table td:nth-child(1),
-.katgo-projects-table th:nth-child(2),
-.katgo-projects-table td:nth-child(2),
-.katgo-projects-table th:nth-child(3),
-.katgo-projects-table td:nth-child(3),
-.katgo-projects-table th:nth-child(4),
-.katgo-projects-table td:nth-child(4),
-.katgo-projects-table th:nth-child(5),
-.katgo-projects-table td:nth-child(5),
-.katgo-projects-table th:nth-child(8),
-.katgo-projects-table td:nth-child(8),
-.katgo-projects-table th:nth-child(9),
-.katgo-projects-table td:nth-child(9),
-.katgo-projects-table th:nth-child(10),
-.katgo-projects-table td:nth-child(10) {
-  width: 3%;
-}
-
-.katgo-projects-table th:nth-child(6),
-.katgo-projects-table td:nth-child(6) {
-  width: 20%;
-}
-
-.katgo-projects-table th:nth-child(7),
-.katgo-projects-table td:nth-child(7) {
-  width: 56%;
+.katgo-table-2x2 td:last-child {
+  width: 30%;
 }
 </style>
 
-
-
-
-  
 <!-- ░░░░░░░░░░░░░░░ TABELA: katgo-table-2x2 ░░░░░░░░░░░░░░░░░░ -->
 <table class="katgo-table-2x2">
   <tr>
-
-    
     <td>
-      
-  <!-- ░░░░░░░░░░STYLE░░░░ TABELA: katgo-projects-table ░░░░░░░░░░ -->
+      <!-- ░░░░░░░░░░STYLE░░░░ TABELA: katgo-projects-table ░░░░░░░░░░ -->
+      <style>
+      .katgo-projects-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: 'Segoe UI', sans-serif;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        table-layout: fixed;
+      }
 
-<style>
-.katgo-projects-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: 'Segoe UI', sans-serif;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  table-layout: fixed;
-}
+      .katgo-projects-table th,
+      .katgo-projects-table td {
+        border: 1px solid #aebdc9;
+        padding: 4px;
+        vertical-align: middle;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
-.katgo-projects-table :is(th, td) {
-  border: 1px solid #aebdc9;
-  padding: 4px;
-  vertical-align: middle;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+      .katgo-projects-table th {
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+      }
 
-.katgo-projects-table th { text-align: center; }
-.katgo-projects-table td { text-align: left; }
+      .katgo-projects-table td {
+        text-align: left;
+      }
 
-.katgo-projects-table :is(th, td):nth-child(1),
-.katgo-projects-table :is(th, td):nth-child(2),
-.katgo-projects-table :is(th, td):nth-child(3),
-.katgo-projects-table :is(th, td):nth-child(4),
-.katgo-projects-table :is(th, td):nth-child(5) { width: 3%; }
+      .katgo-projects-table th:nth-child(1),
+      .katgo-projects-table td:nth-child(1),
+      .katgo-projects-table th:nth-child(2),
+      .katgo-projects-table td:nth-child(2),
+      .katgo-projects-table th:nth-child(3),
+      .katgo-projects-table td:nth-child(3),
+      .katgo-projects-table th:nth-child(4),
+      .katgo-projects-table td:nth-child(4),
+      .katgo-projects-table th:nth-child(5),
+      .katgo-projects-table td:nth-child(5),
+      .katgo-projects-table th:nth-child(8),
+      .katgo-projects-table td:nth-child(8),
+      .katgo-projects-table th:nth-child(9),
+      .katgo-projects-table td:nth-child(9),
+      .katgo-projects-table th:nth-child(10),
+      .katgo-projects-table td:nth-child(10) {
+        width: 3%;
+      }
 
-.katgo-projects-table :is(th, td):nth-child(6) { width: 20%; }
-.katgo-projects-table :is(th, td):nth-child(7) { width: 56%; }
+      .katgo-projects-table th:nth-child(6),
+      .katgo-projects-table td:nth-child(6) {
+        width: 20%;
+      }
 
-.katgo-projects-table :is(th, td):nth-child(8),
-.katgo-projects-table :is(th, td):nth-child(9),
-.katgo-projects-table :is(th, td):nth-child(10) { width: 3%; }
-</style>
+      .katgo-projects-table th:nth-child(7),
+      .katgo-projects-table td:nth-child(7) {
+        width: 56%;
+      }
+      </style>
 
- <!-- ░░░░░░░░░░░ TABELA: katgo-projects-table ░░░░░░░░░░ -->
-      
-<!-- ░░░░░░░░░░░ TABELA: katgo-projects-table ░░░░░░░░░░ -->
-<table class="katgo-projects-table" id="katgo-projects-table">
-  <thead>
-    <tr>
-      <th onclick="sortTable(0)">1 ↑↓</th>
-      <th onclick="sortTable(1)">2 ↑↓</th>
-      <th onclick="sortTable(2)">3 ↑↓</th>
-      <th onclick="sortTable(3)">4 ↑↓</th>
-      <th onclick="sortTable(4)">5 ↑↓</th>
-      <th onclick="sortTable(5)">PROJEKTY ↑↓</th>
-      <th>CHECKBOXY</th>
-      <th onclick="sortTable(7)">8 ↑↓</th>
-      <th onclick="sortTable(8)">9 ↑↓</th>
-      <th onclick="sortTable(9)">10 ↑↓</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>11</td><td>12</td><td>13</td><td>14</td><td>15</td>
-      <td>PROJEKT A</td><td>CHECK</td><td>18</td><td>19</td><td>20</td>
-    </tr>
-    <tr>
-      <td>111</td><td>112</td><td>113</td><td>114</td><td>115</td>
-      <td>PROJEKT B</td><td>CHECK</td><td>118</td><td>119</td><td>110</td>
-    </tr>
-    <tr>
-      <td>1111</td><td>1112</td><td>1113</td><td>1114</td><td>1115</td>
-      <td>PROJEKT C</td><td>CHECK</td><td>1118</td><td>1119</td><td>1110</td>
-    </tr>
-  </tbody>
-</table>
-
-      
-<!-- ░░░░KONIEC░░░░░░░ TABELA: katgo-projects-table ░░░░░KONIEC░░░░░ -->
-
-
- <!-- ░░░░KONIEC░░░░░░░ TABELA: katgo-projects-table ░░░░░KONIEC░░░░░ -->
-    
+      <!-- ░░░░░░░░░░░ TABELA: katgo-projects-table ░░░░░░░░░░ -->
+      <table class="katgo-projects-table" id="katgo-projects-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable(0)">1 ↑↓</th>
+            <th onclick="sortTable(1)">2 ↑↓</th>
+            <th onclick="sortTable(2)">3 ↑↓</th>
+            <th onclick="sortTable(3)">4 ↑↓</th>
+            <th onclick="sortTable(4)">5 ↑↓</th>
+            <th onclick="sortTable(5)">PROJEKTY ↑↓</th>
+            <th>CHECKBOXY</th>
+            <th onclick="sortTable(7)">8 ↑↓</th>
+            <th onclick="sortTable(8)">9 ↑↓</th>
+            <th onclick="sortTable(9)">10 ↑↓</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>11</td><td>12</td><td>13</td><td>14</td><td>15</td>
+            <td>PROJEKT A</td><td>CHECK</td><td>18</td><td>19</td><td>20</td>
+          </tr>
+          <tr>
+            <td>111</td><td>112</td><td>113</td><td>114</td><td>115</td>
+            <td>PROJEKT B</td><td>CHECK</td><td>118</td><td>119</td><td>110</td>
+          </tr>
+          <tr>
+            <td>1111</td><td>1112</td><td>1113</td><td>1114</td><td>1115</td>
+            <td>PROJEKT C</td><td>CHECK</td><td>1118</td><td>1119</td><td>1110</td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
     <td>Wiersz 1, kolumna 2</td>
   </tr>
   <tr>
@@ -317,8 +286,8 @@ body {
     <td>Wiersz 2, kolumna 2</td>
   </tr>
 </table>
-
 <!-- ░░░░░KONIEC░░░░░░░░░░ TABELA: katgo-table-2x2 ░░░░KONIEC░░░░░░░░░░░░░░ -->
+
 
   
   <br>
@@ -4401,10 +4370,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const dir = localStorage.getItem(key + "-dir");
   if (col !== null && dir !== null) {
     sortTable(Number(col));
-    if (dir === "asc") sortTable(Number(col)); // 2x kliknięcie jeśli ma być rosnąco
+    if (dir === "asc") sortTable(Number(col));
   }
 });
 </script>
+
 
 
 
