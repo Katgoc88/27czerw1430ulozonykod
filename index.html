@@ -4067,14 +4067,20 @@ let currentIndex = 0;
 let matches = [];
 
 function searchHighlight() {
-  clearHighlights();
-  const input = document.getElementById("search-input").value.trim().toLowerCase();
-  if (!input) return;
+  const inputEl = document.getElementById("search-input");
+  const input = inputEl.value.trim().toLowerCase();
+
+  clearHighlights(); // zawsze resetuj wszystko na początku
+
+  if (!input) {
+    document.getElementById("result-count").textContent = "0/0";
+    return;
+  }
 
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
     acceptNode: node => {
       const parent = node.parentNode;
-      if (!parent || ['SCRIPT', 'STYLE'].includes(parent.tagName)) return NodeFilter.FILTER_SKIP;
+      if (!parent || ['SCRIPT', 'STYLE', 'TEXTAREA'].includes(parent.tagName)) return NodeFilter.FILTER_SKIP;
       if (node.nodeValue.toLowerCase().includes(input)) return NodeFilter.FILTER_ACCEPT;
       return NodeFilter.FILTER_SKIP;
     }
@@ -4099,6 +4105,7 @@ function searchHighlight() {
         mark.className = "highlighted-match";
         mark.textContent = part;
         mark.style.background = "#ffff00"; // żółty
+        mark.style.padding = "1px 2px";
         matches.push(mark);
         frag.appendChild(mark);
       } else {
@@ -4120,7 +4127,7 @@ function searchHighlight() {
 
 function highlightActive() {
   matches.forEach((el, i) => {
-    el.style.background = "#ffff00"; // standardowy żółty
+    el.style.background = "#ffff00";
     el.style.color = "black";
     if (i === currentIndex) {
       el.style.background = "red";
@@ -4163,11 +4170,11 @@ function clearHighlights() {
   matches = [];
   currentIndex = 0;
   document.getElementById("result-count").textContent = "0/0";
-  document.getElementById("search-input").value = ""; // ← TO DODAJEMY
+  document.getElementById("search-input").value = ""; // czyści pole
 }
 
 function updateCounter() {
-  document.getElementById("result-count").textContent = `${currentIndex + 1}/${matches.length}`;
+  document.getElementById("result-count").textContent = `${matches.length ? currentIndex + 1 : 0}/${matches.length}`;
 }
 </script>
 
