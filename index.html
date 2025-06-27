@@ -4063,86 +4063,81 @@ function importDataByType(type, data) {
 
   
 <script>
-let matches = [];
-let currentIndex = 0;
-let originalNodes = [];
+let highlights = [];
+let current = 0;
+
+function clearHighlights() {
+  highlights.forEach(el => {
+    const parent = el.parentNode;
+    if (!parent) return;
+    parent.replaceChild(document.createTextNode(el.textContent), el);
+    parent.normalize();
+  });
+  highlights = [];
+  updateCounter();
+}
 
 function searchHighlight() {
   clearHighlights();
-  const input = document.getElementById('search-input').value.trim().toLowerCase();
-  if (!input) return;
+  const term = document.getElementById("search-input").value.trim();
+  if (!term) return;
 
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
   while (walker.nextNode()) {
     const node = walker.currentNode;
-    if (node.parentNode && ['SCRIPT', 'STYLE'].includes(node.parentNode.tagName)) continue;
-    const text = node.textContent.toLowerCase();
-    const index = text.indexOf(input);
-    if (index !== -1) {
-      const span = document.createElement('span');
-      span.className = 'highlighted';
-      const before = node.textContent.slice(0, index);
-      const match = node.textContent.slice(index, index + input.length);
-      const after = node.textContent.slice(index + input.length);
-      span.textContent = match;
+    if (!node.parentElement || ['SCRIPT', 'STYLE', 'TEXTAREA'].includes(node.parentElement.tagName)) continue;
 
-      const frag = document.createDocumentFragment();
-      if (before) frag.appendChild(document.createTextNode(before));
-      frag.appendChild(span);
-      if (after) frag.appendChild(document.createTextNode(after));
+    const idx = node.textContent.toLowerCase().indexOf(term.toLowerCase());
+    if (idx !== -1) {
+      const span = document.createElement("span");
+      span.className = "highlighted";
+      span.style.backgroundColor = "yellow";
+      span.textContent = node.textContent.slice(idx, idx + term.length);
 
-      originalNodes.push({ parent: node.parentNode, original: node });
-      node.parentNode.replaceChild(frag, node);
-      matches.push(span);
+      const before = document.createTextNode(node.textContent.slice(0, idx));
+      const after = document.createTextNode(node.textContent.slice(idx + term.length));
+
+      const parent = node.parentNode;
+      parent.replaceChild(after, node);
+      parent.insertBefore(span, after);
+      parent.insertBefore(before, span);
+
+      highlights.push(span);
     }
   }
-  updateResultCount();
-  if (matches.length) highlightActive(0);
+
+  if (highlights.length > 0) {
+    current = 0;
+    updateHighlight();
+  }
+  updateCounter();
 }
 
-function clearHighlights() {
-  matches.forEach(span => {
-    const parent = span.parentNode;
-    if (!parent) return;
-    const text = parent.textContent;
-    parent.replaceWith(document.createTextNode(text));
+function updateHighlight() {
+  highlights.forEach((el, i) => {
+    el.style.backgroundColor = (i === current) ? "orange" : "yellow";
   });
-  originalNodes.forEach(({ parent, original }) => {
-    if (parent) {
-      const clone = original.cloneNode(true);
-      parent.innerHTML = parent.textContent;
-      parent.appendChild(clone);
-    }
-  });
-  matches = [];
-  originalNodes = [];
-  updateResultCount();
-}
-
-function highlightActive(index) {
-  matches.forEach(m => m.style.backgroundColor = 'yellow');
-  matches[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
-  matches[index].style.backgroundColor = 'orange';
-  currentIndex = index;
-  updateResultCount();
+  highlights[current].scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function nextMatch() {
-  if (!matches.length) return;
-  currentIndex = (currentIndex + 1) % matches.length;
-  highlightActive(currentIndex);
+  if (!highlights.length) return;
+  current = (current + 1) % highlights.length;
+  updateHighlight();
+  updateCounter();
 }
 
 function prevMatch() {
-  if (!matches.length) return;
-  currentIndex = (currentIndex - 1 + matches.length) % matches.length;
-  highlightActive(currentIndex);
+  if (!highlights.length) return;
+  current = (current - 1 + highlights.length) % highlights.length;
+  updateHighlight();
+  updateCounter();
 }
 
-function updateResultCount() {
-  const count = document.getElementById('result-count');
-  if (matches.length === 0) count.textContent = '0/0';
-  else count.textContent = `${currentIndex + 1}/${matches.length}`;
+function updateCounter() {
+  const el = document.getElementById("result-count");
+  if (highlights.length === 0) el.textContent = "0/0";
+  else el.textContent = `${current + 1}/${highlights.length}`;
 }
 </script>
 
