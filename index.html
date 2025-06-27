@@ -88,17 +88,18 @@ body {
       <button id="reset-all" style="padding:10px 18px; font-size:16px; border-radius:8px; background:#f39c12; color:white; border:none; font-weight:bold;">RESET ALL</button>
     </td>
    
-    <!-- 🔍 WYSZUKIWARKA -->
+   <!-- WYSZUKIWARKA -->
 <td style="width:60%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
   <div id="search-box" style="display:flex; justify-content:center; align-items:center; gap:8px;">
-    <input id="search-input" type="text" placeholder="Szukaj..." style="flex:1; max-width:500px; padding:8px 12px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
-    <button onclick="highlightSearch()" style="padding:6px 10px;">🔍</button>
+    <input id="search-input" type="text" placeholder="Szukaj..." style="flex:1; max-width:360px; padding:8px 12px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
+    <button onclick="searchHighlight()" style="padding:6px 10px;">🔍</button>
     <button onclick="prevMatch()" style="padding:6px 10px;">⬅️</button>
     <button onclick="nextMatch()" style="padding:6px 10px;">➡️</button>
-    <span id="search-count" style="font-size:15px; min-width:40px; text-align:center;">0/0</span>
-    <button onclick="clearSearch()" style="padding:6px 10px; font-weight:bold; color:white; background:#e74c3c; border:none; border-radius:6px;">X</button>
+    <span id="result-count" style="font-size:15px; min-width:40px; text-align:center;">0/0</span>
+    <button onclick="clearHighlights()" style="padding:6px 10px; font-weight:bold; color:white; background:#e74c3c; border:none; border-radius:6px;">X</button>
   </div>
 </td>
+
 
 
       
@@ -4069,77 +4070,72 @@ function importDataByType(type, data) {
 
   
 <script>
-let matches = [], currentIndex = 0;
+let matches = [], currentMatchIndex = 0;
 
-function highlightSearch() {
-  clearSearch();
-  const term = document.getElementById("search-input").value.trim();
-  if (!term) return updateCounter();
+function searchHighlight() {
+  clearHighlights();
+  const searchTerm = document.getElementById("search-input").value.trim().toLowerCase();
+  if (!searchTerm) return;
 
-  const regex = new RegExp(term, "gi");
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-  while (walker.nextNode()) {
-    const node = walker.currentNode;
-    const parent = node.parentElement;
-    if (!parent || parent.closest("#search-box") || parent.tagName === "SCRIPT" || parent.tagName === "STYLE") continue;
-
-    const frag = document.createDocumentFragment();
-    let lastIndex = 0;
-    node.nodeValue.replace(regex, (match, index) => {
-      if (index > lastIndex) frag.appendChild(document.createTextNode(node.nodeValue.slice(lastIndex, index)));
-      const span = document.createElement("span");
-      span.textContent = match;
-      span.className = "highlighted-search";
-      frag.appendChild(span);
-      matches.push(span);
-      lastIndex = index + match.length;
-    });
-    if (lastIndex < node.nodeValue.length) frag.appendChild(document.createTextNode(node.nodeValue.slice(lastIndex)));
-
-    if (matches.length) node.replaceWith(frag);
+  const treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  while (treeWalker.nextNode()) {
+    const node = treeWalker.currentNode;
+    const value = node.nodeValue;
+    const parent = node.parentNode;
+    if (parent && !["SCRIPT", "STYLE"].includes(parent.nodeName)) {
+      const lowerValue = value.toLowerCase();
+      let startIndex = 0;
+      while ((startIndex = lowerValue.indexOf(searchTerm, startIndex)) !== -1) {
+        const before = document.createTextNode(value.substring(0, startIndex));
+        const match = document.createElement("mark");
+        match.className = "search-highlight";
+        match.textContent = value.substr(startIndex, searchTerm.length);
+        const after = document.createTextNode(value.substring(startIndex + searchTerm.length));
+        const wrapper = document.createDocumentFragment();
+        wrapper.appendChild(before);
+        wrapper.appendChild(match);
+        wrapper.appendChild(after);
+        parent.replaceChild(wrapper, node);
+        matches.push(match);
+        break; // break this text node; move on to next one
+      }
+    }
   }
   updateCounter();
-  scrollToCurrent();
+  scrollToMatch(0);
 }
 
-function scrollToCurrent() {
-  if (matches.length === 0) return;
-  matches.forEach(el => el.style.backgroundColor = "");
-  matches[currentIndex].style.backgroundColor = "yellow";
-  matches[currentIndex].scrollIntoView({ behavior: "smooth", block: "center" });
+function clearHighlights() {
+  matches.forEach(el => {
+    const text = document.createTextNode(el.textContent);
+    el.parentNode.replaceChild(text, el);
+  });
+  matches = [];
+  currentMatchIndex = 0;
+  updateCounter();
 }
 
-function nextMatch() {
+function scrollToMatch(index) {
   if (!matches.length) return;
-  currentIndex = (currentIndex + 1) % matches.length;
-  scrollToCurrent();
+  currentMatchIndex = ((index % matches.length) + matches.length) % matches.length;
+  matches.forEach((m, i) => m.style.background = i === currentMatchIndex ? 'orange' : 'yellow');
+  matches[currentMatchIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
   updateCounter();
 }
 
 function prevMatch() {
-  if (!matches.length) return;
-  currentIndex = (currentIndex - 1 + matches.length) % matches.length;
-  scrollToCurrent();
-  updateCounter();
+  if (matches.length) scrollToMatch(currentMatchIndex - 1);
 }
 
-function clearSearch() {
-  matches.forEach(el => {
-    const parent = el.parentNode;
-    parent.replaceChild(document.createTextNode(el.textContent), el);
-    parent.normalize();
-  });
-  matches = [];
-  currentIndex = 0;
-  updateCounter();
+function nextMatch() {
+  if (matches.length) scrollToMatch(currentMatchIndex + 1);
 }
 
 function updateCounter() {
-  const display = document.getElementById("search-count");
-  display.textContent = matches.length ? `${currentIndex + 1}/${matches.length}` : "0/0";
+  const counter = document.getElementById("result-count");
+  counter.textContent = matches.length ? `${currentMatchIndex + 1}/${matches.length}` : "0/0";
 }
 </script>
-
 
 
 
