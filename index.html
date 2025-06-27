@@ -80,25 +80,24 @@ body {
   
 
 <!-- ░░░░░░░░░░░░░░░░░░░░TU ZACZYNA SIĘ TO CO BĘDZIE WIDOCZNE NA STRONIE░░░░░░░░░░░░░░░░░░░░ -->
-<!-- 🔍 Pasek wyszukiwania + reset -->
 <table style="position:fixed; top:0; left:0; width:100%; z-index:9999; border-collapse:collapse; background:linear-gradient(90deg, #dde7f2, #cadbe9); box-shadow:0 2px 10px rgba(0,0,0,0.1); font-family:'Segoe UI',sans-serif;">
- 
   <tr>
-    <td style="width:10%; padding:6px; text-align:center; border:1px solid #aebdc9;">
-      <button id="reset-all" style="padding:10px 18px; font-size:16px; border-radius:8px; background:#f39c12; color:white; border:none; font-weight:bold;">RESET ALL</button>
+    <td style="width:8%; padding:6px; text-align:center; border:1px solid #aebdc9;">
+      <button id="reset-all" style="padding:10px 18px; font-size:16px; border-radius:8px; background:#f39c12; color:white; border:none; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.1);">RESET ALL</button>
     </td>
-   
-   <!-- WYSZUKIWARKA -->
-<td style="width:60%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-  <div id="search-box" style="display:flex; justify-content:center; align-items:center; gap:8px;">
-    <input id="search-input" type="text" placeholder="Szukaj..." style="flex:1; max-width:360px; padding:8px 12px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
-    <button onclick="searchHighlight()" style="padding:6px 10px;">🔍</button>
-    <button onclick="prevMatch()" style="padding:6px 10px;">⬅️</button>
-    <button onclick="nextMatch()" style="padding:6px 10px;">➡️</button>
-    <span id="result-count" style="font-size:15px; min-width:40px; text-align:center;">0/0</span>
-    <button onclick="clearHighlights()" style="padding:6px 10px; font-weight:bold; color:white; background:#e74c3c; border:none; border-radius:6px;">X</button>
-  </div>
-</td>
+    <td style="width:60%; padding:6px; border:1px solid #aebdc9;">
+      <div id="search-box" style="display:flex; align-items:center; gap:8px;">
+        <input id="search-input" type="text" placeholder="Szukaj..." style="flex:1; max-width:420px; padding:8px 12px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
+        <button onclick="searchHighlight()">🔍</button>
+        <button onclick="prevMatch()">⬅️</button>
+        <button onclick="nextMatch()">➡️</button>
+        <span id="result-count" style="font-size:15px; min-width:40px; text-align:center;">0/0</span>
+        <button onclick="clearHighlights()" style="font-weight:bold; color:white; background:#e74c3c; border:none; border-radius:6px;">X</button>
+      </div>
+    </td>
+  </tr>
+</table>
+
 
 
 
@@ -4070,39 +4069,52 @@ function importDataByType(type, data) {
 
   
 <script>
-let matches = [], currentMatchIndex = 0;
+let currentIndex = 0;
+let matches = [];
 
 function searchHighlight() {
   clearHighlights();
-  const searchTerm = document.getElementById("search-input").value.trim().toLowerCase();
-  if (!searchTerm) return;
+  const input = document.getElementById("search-input").value.trim().toLowerCase();
+  if (!input) return;
 
-  const treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-  while (treeWalker.nextNode()) {
-    const node = treeWalker.currentNode;
-    const value = node.nodeValue;
-    const parent = node.parentNode;
-    if (parent && !["SCRIPT", "STYLE"].includes(parent.nodeName)) {
-      const lowerValue = value.toLowerCase();
-      let startIndex = 0;
-      while ((startIndex = lowerValue.indexOf(searchTerm, startIndex)) !== -1) {
-        const before = document.createTextNode(value.substring(0, startIndex));
-        const match = document.createElement("mark");
-        match.className = "search-highlight";
-        match.textContent = value.substr(startIndex, searchTerm.length);
-        const after = document.createTextNode(value.substring(startIndex + searchTerm.length));
-        const wrapper = document.createDocumentFragment();
-        wrapper.appendChild(before);
-        wrapper.appendChild(match);
-        wrapper.appendChild(after);
-        parent.replaceChild(wrapper, node);
-        matches.push(match);
-        break; // break this text node; move on to next one
-      }
+  const body = document.body;
+  const walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, {
+    acceptNode: node => {
+      if (node.nodeValue.trim().toLowerCase().includes(input)) return NodeFilter.FILTER_ACCEPT;
     }
+  });
+
+  let node;
+  while (node = walker.nextNode()) {
+    const span = document.createElement("span");
+    span.className = "highlighted-match";
+    span.style.backgroundColor = "#ffff00";
+    span.textContent = node.nodeValue;
+    const regex = new RegExp(`(${input})`, "gi");
+    const parts = node.nodeValue.split(regex);
+    const frag = document.createDocumentFragment();
+    parts.forEach(part => {
+      if (part.toLowerCase() === input) {
+        const mark = document.createElement("mark");
+        mark.textContent = part;
+        mark.style.backgroundColor = "#ffeb3b";
+        mark.className = "highlighted-match";
+        frag.appendChild(mark);
+        matches.push(mark);
+      } else {
+        frag.appendChild(document.createTextNode(part));
+      }
+    });
+    node.parentNode.replaceChild(frag, node);
   }
-  updateCounter();
-  scrollToMatch(0);
+
+  if (matches.length) {
+    currentIndex = 0;
+    updateCounter();
+    scrollToMatch();
+  } else {
+    document.getElementById("result-count").textContent = "0/0";
+  }
 }
 
 function clearHighlights() {
@@ -4111,29 +4123,29 @@ function clearHighlights() {
     el.parentNode.replaceChild(text, el);
   });
   matches = [];
-  currentMatchIndex = 0;
-  updateCounter();
+  document.getElementById("result-count").textContent = "0/0";
 }
 
-function scrollToMatch(index) {
-  if (!matches.length) return;
-  currentMatchIndex = ((index % matches.length) + matches.length) % matches.length;
-  matches.forEach((m, i) => m.style.background = i === currentMatchIndex ? 'orange' : 'yellow');
-  matches[currentMatchIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
-  updateCounter();
-}
-
-function prevMatch() {
-  if (matches.length) scrollToMatch(currentMatchIndex - 1);
+function scrollToMatch() {
+  if (matches.length > 0) matches[currentIndex].scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function nextMatch() {
-  if (matches.length) scrollToMatch(currentMatchIndex + 1);
+  if (!matches.length) return;
+  currentIndex = (currentIndex + 1) % matches.length;
+  updateCounter();
+  scrollToMatch();
+}
+
+function prevMatch() {
+  if (!matches.length) return;
+  currentIndex = (currentIndex - 1 + matches.length) % matches.length;
+  updateCounter();
+  scrollToMatch();
 }
 
 function updateCounter() {
-  const counter = document.getElementById("result-count");
-  counter.textContent = matches.length ? `${currentMatchIndex + 1}/${matches.length}` : "0/0";
+  document.getElementById("result-count").textContent = `${currentIndex + 1}/${matches.length}`;
 }
 </script>
 
