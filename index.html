@@ -4079,7 +4079,7 @@ function clearHighlights() {
 
 function searchHighlight() {
   clearHighlights();
-  const term = document.getElementById("search-input").value.trim();
+  const term = document.getElementById("search-input").value.trim().toLowerCase();
   if (!term) return;
 
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
@@ -4087,22 +4087,33 @@ function searchHighlight() {
     const node = walker.currentNode;
     if (!node.parentElement || ['SCRIPT', 'STYLE', 'TEXTAREA'].includes(node.parentElement.tagName)) continue;
 
-    const idx = node.textContent.toLowerCase().indexOf(term.toLowerCase());
-    if (idx !== -1) {
-      const span = document.createElement("span");
-      span.className = "highlighted";
-      span.style.backgroundColor = "yellow";
-      span.textContent = node.textContent.slice(idx, idx + term.length);
+    const text = node.textContent;
+    const matches = [];
+    let index = text.toLowerCase().indexOf(term);
+    while (index !== -1) {
+      matches.push(index);
+      index = text.toLowerCase().indexOf(term, index + term.length);
+    }
 
-      const before = document.createTextNode(node.textContent.slice(0, idx));
-      const after = document.createTextNode(node.textContent.slice(idx + term.length));
-
+    if (matches.length > 0) {
       const parent = node.parentNode;
-      parent.replaceChild(after, node);
-      parent.insertBefore(span, after);
-      parent.insertBefore(before, span);
+      let lastIndex = 0;
 
-      highlights.push(span);
+      matches.forEach((matchIndex, i) => {
+        const before = document.createTextNode(text.slice(lastIndex, matchIndex));
+        const span = document.createElement("span");
+        span.className = "highlighted";
+        span.style.backgroundColor = "yellow";
+        span.textContent = text.slice(matchIndex, matchIndex + term.length);
+        highlights.push(span);
+        parent.insertBefore(before, node);
+        parent.insertBefore(span, node);
+        lastIndex = matchIndex + term.length;
+      });
+
+      const after = document.createTextNode(text.slice(lastIndex));
+      parent.insertBefore(after, node);
+      parent.removeChild(node);
     }
   }
 
@@ -4140,6 +4151,7 @@ function updateCounter() {
   else el.textContent = `${current + 1}/${highlights.length}`;
 }
 </script>
+
 
 
 
