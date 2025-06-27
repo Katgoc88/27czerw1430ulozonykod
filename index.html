@@ -220,27 +220,41 @@ body {
 
  <!-- ░░░░░░░░░░░ TABELA: katgo-projects-table ░░░░░░░░░░ -->
       
-<table class="katgo-projects-table">
-  <tr>
-    <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
-    <th>PROJEKTY</th>
-    <th>CHECKBOXY</th>
-    <th>8</th><th>9</th><th>10</th>
-  </tr>
-  <tr>
-    <td>1</td><td>2</td><td>3</td><td>3</td><td>5</td>
-    <td>PROJEKT</td><td>CHECK</td><td>8</td><td>9</td><td>10</td>
-  </tr>
-  <tr>
-    <td>1</td><td>2</td><td>3</td><td>3</td><td>5</td>
-    <td>PROJEKT</td><td>CHECK</td><td>8</td><td>9</td><td>10</td>
-  </tr>
-   <tr>
-    <td>1</td><td>2</td><td>3</td><td>3</td><td>5</td>
-    <td>PROJEKT</td><td>CHECK</td><td>8</td><td>9</td><td>10</td>
-  </tr>
+<!-- ░░░░░░░░░░░ TABELA: katgo-projects-table ░░░░░░░░░░ -->
+<table class="katgo-projects-table" id="katgo-projects-table">
+  <thead>
+    <tr>
+      <th onclick="sortTable(0)">1 ↑↓</th>
+      <th onclick="sortTable(1)">2 ↑↓</th>
+      <th onclick="sortTable(2)">3 ↑↓</th>
+      <th onclick="sortTable(3)">4 ↑↓</th>
+      <th onclick="sortTable(4)">5 ↑↓</th>
+      <th onclick="sortTable(5)">PROJEKTY ↑↓</th>
+      <th>CHECKBOXY</th>
+      <th onclick="sortTable(7)">8 ↑↓</th>
+      <th onclick="sortTable(8)">9 ↑↓</th>
+      <th onclick="sortTable(9)">10 ↑↓</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td><td>2</td><td>3</td><td>3</td><td>5</td>
+      <td>PROJEKT</td><td>CHECK</td><td>8</td><td>9</td><td>10</td>
+    </tr>
+    <tr>
+      <td>1</td><td>2</td><td>3</td><td>3</td><td>5</td>
+      <td>PROJEKT</td><td>CHECK</td><td>8</td><td>9</td><td>10</td>
+    </tr>
+    <tr>
+      <td>1</td><td>2</td><td>3</td><td>3</td><td>5</td>
+      <td>PROJEKT</td><td>CHECK</td><td>8</td><td>9</td><td>10</td>
+    </tr>
+  </tbody>
 </table>
-</td>
+
+      
+<!-- ░░░░KONIEC░░░░░░░ TABELA: katgo-projects-table ░░░░░KONIEC░░░░░ -->
+
 
  <!-- ░░░░KONIEC░░░░░░░ TABELA: katgo-projects-table ░░░░░KONIEC░░░░░ -->
     
@@ -4300,6 +4314,49 @@ function updateCounter() {
 </script>
 
 
+
+
+
+<script>
+function sortTable(n) {
+  const table = document.getElementById("katgo-projects-table");
+  const tbody = table.tBodies[0];
+  const rows = Array.from(tbody.rows);
+  const isNumber = val => !isNaN(parseFloat(val)) && isFinite(val);
+  const key = "katgo-sort";
+
+  let direction = localStorage.getItem(key + "-dir") === "asc" ? "desc" : "asc";
+  localStorage.setItem(key + "-col", n);
+  localStorage.setItem(key + "-dir", direction);
+
+  rows.sort((a, b) => {
+    const aText = a.cells[n].textContent.trim();
+    const bText = b.cells[n].textContent.trim();
+    const aVal = isNumber(aText) ? parseFloat(aText) : aText.toLowerCase();
+    const bVal = isNumber(bText) ? parseFloat(bText) : bText.toLowerCase();
+
+    if (aVal < bVal) return direction === "asc" ? -1 : 1;
+    if (aVal > bVal) return direction === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  rows.forEach(row => tbody.appendChild(row));
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const key = "katgo-sort";
+  const col = localStorage.getItem(key + "-col");
+  const dir = localStorage.getItem(key + "-dir");
+  if (col !== null && dir !== null) {
+    sortTable(Number(col));
+    if (dir === "asc") sortTable(Number(col)); // 2x kliknięcie jeśli ma być rosnąco
+  }
+});
+</script>
+
+
+
+  
 
 
 
