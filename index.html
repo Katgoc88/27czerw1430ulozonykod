@@ -79,19 +79,18 @@ body {
 
   
 
-<!-- ░░░░░░░WIERSZ Z PRZYCISKAMI PRZYPIĘTY░░░░░░ -->
+<!-- ░░░░░░░░░░░░░░░░░░░░TU ZACZYNA SIĘ TO CO BĘDZIE WIDOCZNE NA STRONIE░░░░░░░░░░░░░░░░░░░░ -->
 <table style="position:fixed; top:0; left:0; width:100%; z-index:9999; border-collapse:collapse; background:linear-gradient(90deg, #dde7f2, #cadbe9); box-shadow:0 2px 10px rgba(0,0,0,0.1); font-family:'Segoe UI',sans-serif;">
   <tr>
-
     <!-- RESET -->
     <td style="width:8%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-      <button id="reset-all" style="padding:12px 22px; font-size:17px; border-radius:8px; background:#f39c12; color:white; border:none; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.1);">RESET ALL</button>
+      <button id="reset-all" style="padding:10px 18px; font-size:16px; border-radius:8px; background:#f39c12; color:white; border:none; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.1);">RESET ALL</button>
     </td>
 
     <!-- WYSZUKIWARKA -->
     <td style="width:60%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-      <div style="display:flex; justify-content:center; align-items:center; gap:8px;">
-        <input id="search-input" type="text" placeholder="Szukaj..." style="flex:1; max-width:420px; padding:10px 14px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
+      <div id="search-box" style="display:flex; justify-content:center; align-items:center; gap:8px;">
+        <input id="search-input" type="text" placeholder="Szukaj..." style="flex:1; max-width:500px; padding:10px 14px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
         <button onclick="searchHighlight()" style="padding:6px 10px;">🔍</button>
         <button onclick="prevMatch()" style="padding:6px 10px;">⬅️</button>
         <button onclick="nextMatch()" style="padding:6px 10px;">➡️</button>
@@ -99,6 +98,7 @@ body {
         <button onclick="clearHighlights()" style="padding:6px 10px; font-weight:bold; color:white; background:#e74c3c; border:none; border-radius:6px;">X</button>
       </div>
     </td>
+    
 
     <!-- EKSPORT JSON -->
     <td style="width:8%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
@@ -4063,71 +4063,61 @@ function importDataByType(type, data) {
 
   
 <script>
-let matches = [], currentIndex = 0;
+let currentMatch = 0, matches = [];
 
 function searchHighlight() {
   clearHighlights();
-  const term = document.getElementById("search-input").value.trim();
-  if (!term) return updateCounter();
+  const searchText = document.getElementById("search-input").value.trim().toLowerCase();
+  if (!searchText) return;
 
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-  while (walker.nextNode()) {
-    const node = walker.currentNode;
-    if (!node.parentNode.closest('#search-box') && node.nodeValue.toLowerCase().includes(term.toLowerCase())) {
-      const span = document.createElement('span');
-      span.innerHTML = node.nodeValue.replace(new RegExp(`(${term})`, 'gi'), '<mark>$1</mark>');
-      node.parentNode.replaceChild(span, node);
-    }
-  }
+  const bodyText = document.body.innerHTML;
+  const regex = new RegExp(`(${searchText})`, 'gi');
+  const markedText = bodyText.replace(regex, '<mark class="highlighted">$1</mark>');
+  document.body.innerHTML = markedText;
 
-  matches = [...document.querySelectorAll('mark')];
-  currentIndex = 0;
-  scrollToMatch();
-  updateCounter();
+  matches = Array.from(document.querySelectorAll("mark.highlighted"));
+  updateResultCount();
+  if (matches.length > 0) scrollToMatch(0);
 }
 
-function scrollToMatch() {
+function scrollToMatch(index) {
   if (matches.length === 0) return;
-  matches.forEach(m => m.style.backgroundColor = '');
-  const active = matches[currentIndex];
-  active.scrollIntoView({ behavior: "smooth", block: "center" });
-  active.style.backgroundColor = "#ffec99";
+  matches.forEach(el => el.style.background = "");
+  matches[index].style.background = "orange";
+  matches[index].scrollIntoView({ behavior: "smooth", block: "center" });
+  currentMatch = index;
+  updateResultCount();
 }
 
 function nextMatch() {
   if (matches.length === 0) return;
-  currentIndex = (currentIndex + 1) % matches.length;
-  scrollToMatch();
-  updateCounter();
+  currentMatch = (currentMatch + 1) % matches.length;
+  scrollToMatch(currentMatch);
 }
 
 function prevMatch() {
   if (matches.length === 0) return;
-  currentIndex = (currentIndex - 1 + matches.length) % matches.length;
-  scrollToMatch();
-  updateCounter();
+  currentMatch = (currentMatch - 1 + matches.length) % matches.length;
+  scrollToMatch(currentMatch);
 }
 
 function clearHighlights() {
-  matches.forEach(mark => {
-    const textNode = document.createTextNode(mark.textContent);
-    mark.parentNode.replaceChild(textNode, mark);
+  const highlights = document.querySelectorAll("mark.highlighted");
+  highlights.forEach(el => {
+    const parent = el.parentNode;
+    parent.replaceChild(document.createTextNode(el.textContent), el);
+    parent.normalize();
   });
   matches = [];
-  currentIndex = 0;
-  updateCounter();
-  document.getElementById("search-input").value = "";
+  updateResultCount();
 }
 
-function updateCounter() {
-  const display = document.getElementById("result-count");
-  if (matches.length === 0) {
-    display.textContent = "0/0";
-  } else {
-    display.textContent = `${currentIndex + 1}/${matches.length}`;
-  }
+function updateResultCount() {
+  const el = document.getElementById("result-count");
+  el.textContent = matches.length > 0 ? `${currentMatch + 1}/${matches.length}` : "0/0";
 }
 </script>
+
 
 
 
