@@ -163,26 +163,44 @@ body {
   <!-- ░░░░░STYL░░░░░░░░ TABELA: katgo-table-2x2 ░░░░░░░░░░░░░░░░░░░░ -->
 
 <style>
-.katgo-table-2x2 {
+.katgo-projects-table {
   width: 100%;
   border-collapse: collapse;
   font-family: 'Segoe UI', sans-serif;
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  margin-top: 20px;
+  table-layout: fixed;
 }
-.katgo-table-2x2 td {
+.katgo-projects-table :is(th, td) {
   border: 1px solid #aebdc9;
-  padding: 8px;
-  text-align: center;
+  padding: 4px;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.katgo-table-2x2 td:first-child {
-  width: 70%;
-}
-.katgo-table-2x2 td:last-child {
-  width: 30%;
+.katgo-projects-table th { text-align: center; }
+.katgo-projects-table td { text-align: left; }
+
+.katgo-projects-table :is(th, td):nth-child(1),
+.katgo-projects-table :is(th, td):nth-child(2),
+.katgo-projects-table :is(th, td):nth-child(3),
+.katgo-projects-table :is(th, td):nth-child(4),
+.katgo-projects-table :is(th, td):nth-child(5) { width: 3%; }
+
+.katgo-projects-table :is(th, td):nth-child(6) { width: 20%; }
+.katgo-projects-table :is(th, td):nth-child(7) { width: 56%; }
+
+.katgo-projects-table :is(th, td):nth-child(8),
+.katgo-projects-table :is(th, td):nth-child(9),
+.katgo-projects-table :is(th, td):nth-child(10) { width: 3%; }
+
+/* 🔥 TO DODAJE KLIKWALNOŚĆ DO STRZAŁEK */
+.katgo-projects-table th[onclick] {
+  cursor: pointer;
+  user-select: none;
 }
 </style>
+
 
 
   
