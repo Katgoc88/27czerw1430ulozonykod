@@ -4159,19 +4159,22 @@ function prevMatch() {
 }
 
 function clearHighlights() {
-  matches.forEach(mark => {
+  const highlighted = document.querySelectorAll("mark.highlighted-match");
+  highlighted.forEach(mark => {
     const text = document.createTextNode(mark.textContent);
-    if (mark.parentNode) {
-      mark.parentNode.replaceChild(text, mark);
-      mark.parentNode.normalize();
+    const parent = mark.parentNode;
+    if (parent) {
+      parent.replaceChild(text, mark);
+      parent.normalize();
     }
   });
 
   matches = [];
   currentIndex = 0;
   document.getElementById("result-count").textContent = "0/0";
-  document.getElementById("search-input").value = ""; // czyści pole
+  document.getElementById("search-input").value = "";
 }
+
 
 function updateCounter() {
   document.getElementById("result-count").textContent = `${matches.length ? currentIndex + 1 : 0}/${matches.length}`;
