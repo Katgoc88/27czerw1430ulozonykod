@@ -92,7 +92,7 @@ body {
 
     <!-- WYSZUKIWARKA -->
     <td style="width:60%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-      <div id="search-box" style="position:fixed; top:60px; left:50%; transform:translateX(-50%); background:#dde7f2; padding:6px 12px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15); z-index:9999; display:flex; align-items:center; gap:6px;">
+      <div id="search-box" style="display:flex; justify-content:center; align-items:center; gap:6px;">
         <input id="search-input" type="text" placeholder="Szukaj..." style="padding:6px 10px; border:1px solid #ccc; border-radius:6px; font-size:14px; width:180px;">
         <button onclick="searchHighlight()" style="padding:4px 8px;">🔍</button>
         <button onclick="prevMatch()" style="padding:4px 8px;">⬅️</button>
@@ -102,35 +102,44 @@ body {
       </div>
     </td>
 
-    <!-- EKSPORT KOPIOWANIE -->
+    <!-- EKSPORT JSON -->
     <td style="width:8%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-      <div style="display:flex; align-items:center; gap:6px; background:#dde7f2; padding:6px 10px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15);">
-        <textarea id="exportOutput" placeholder="..." style="height:28px; width:160px; font-size:13px; padding:4px 6px; border-radius:6px; border:1px solid #ccc; resize:none;"></textarea>
-        <button onclick="copyExportJSON()" style="padding:4px;">📋</button>
-        <button onclick="clearExportJSON()" style="padding:4px;">❌</button>
-        <button onclick="exportCheckCopy()" style="padding:4px;">☑️</button>
-        <button onclick="exportAllNotesCopy()" style="padding:4px;">📝</button>
-        <button onclick="exportAllCopy()" style="padding:4px;">📦</button>
+      <div style="border:1px solid #aebdc9; border-radius:8px; padding:4px;">
+        <div style="font-size:12px; font-weight:bold; margin-bottom:4px;">Eksport JSON</div>
+        <div style="display:flex; align-items:center; gap:4px;">
+          <textarea id="exportOutput" placeholder="..." style="height:28px; width:160px; font-size:13px; padding:4px 6px; border-radius:6px; border:1px solid #ccc; resize:none;"></textarea>
+          <button onclick="copyExportJSON()" style="padding:4px;">📋</button>
+          <button onclick="clearExportJSON()" style="padding:4px;">❌</button>
+          <button onclick="exportCheckCopy()" style="padding:4px;">☑️</button>
+          <button onclick="exportAllNotesCopy()" style="padding:4px;">📝</button>
+          <button onclick="exportAllCopy()" style="padding:4px;">📦</button>
+        </div>
       </div>
     </td>
 
     <!-- EKSPORT DO PLIKU -->
     <td style="width:8%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-      <div style="display:flex; align-items:center; gap:6px; background:#dde7f2; padding:6px 10px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15);">
-        <input type="file" id="fileInputExport" style="font-size:13px;">
-        <button onclick="exportCheck()" style="padding:4px;">☑️</button>
-        <button onclick="exportAllNotes()" style="padding:4px;">📝</button>
-        <button onclick="exportAll()" style="padding:4px;">📦</button>
+      <div style="border:1px solid #aebdc9; border-radius:8px; padding:4px;">
+        <div style="font-size:12px; font-weight:bold; margin-bottom:4px;">Eksport</div>
+        <div style="display:flex; align-items:center; gap:4px;">
+          <input type="file" id="fileInputExport" style="font-size:13px;">
+          <button onclick="exportCheck()" style="padding:4px;">☑️</button>
+          <button onclick="exportAllNotes()" style="padding:4px;">📝</button>
+          <button onclick="exportAll()" style="padding:4px;">📦</button>
+        </div>
       </div>
     </td>
 
     <!-- IMPORT Z PLIKU -->
     <td style="width:8%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-      <div style="display:flex; align-items:center; gap:6px; background:#dde7f2; padding:6px 10px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15);">
-        <input type="file" id="fileInput" style="font-size:13px;">
-        <button onclick="importFromFile('check')" style="padding:4px;">☑️</button>
-        <button onclick="importFromFile('notes-all')" style="padding:4px;">📝</button>
-        <button onclick="importFromFile('all')" style="padding:4px;">📦</button>
+      <div style="border:1px solid #aebdc9; border-radius:8px; padding:4px;">
+        <div style="font-size:12px; font-weight:bold; margin-bottom:4px;">Import</div>
+        <div style="display:flex; align-items:center; gap:4px;">
+          <input type="file" id="fileInput" style="font-size:13px;">
+          <button onclick="importFromFile('check')" style="padding:4px;">☑️</button>
+          <button onclick="importFromFile('notes-all')" style="padding:4px;">📝</button>
+          <button onclick="importFromFile('all')" style="padding:4px;">📦</button>
+        </div>
       </div>
     </td>
 
