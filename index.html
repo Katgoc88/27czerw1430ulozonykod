@@ -4073,27 +4073,33 @@ function searchHighlight() {
 
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
     acceptNode: node => {
-      if (node.parentNode && node.parentNode.nodeName !== "SCRIPT" && node.nodeValue.toLowerCase().includes(input)) {
-        return NodeFilter.FILTER_ACCEPT;
-      }
+      const parent = node.parentNode;
+      if (!parent || ['SCRIPT', 'STYLE'].includes(parent.tagName)) return NodeFilter.FILTER_SKIP;
+      if (node.nodeValue.toLowerCase().includes(input)) return NodeFilter.FILTER_ACCEPT;
+      return NodeFilter.FILTER_SKIP;
     }
   });
 
+  const nodesToProcess = [];
   let node;
-  while ((node = walker.nextNode())) {
-    const originalText = node.nodeValue;
-    const regex = new RegExp(`(${input})`, "gi");
-    const parts = originalText.split(regex);
+  while (node = walker.nextNode()) {
+    nodesToProcess.push(node);
+  }
 
-    if (parts.length < 2) continue;
+  nodesToProcess.forEach(node => {
+    const text = node.nodeValue;
+    const regex = new RegExp(`(${input})`, "gi");
+    const parts = text.split(regex);
+
+    if (parts.length < 2) return;
 
     const frag = document.createDocumentFragment();
     parts.forEach(part => {
       if (part.toLowerCase() === input) {
         const mark = document.createElement("mark");
-        mark.className = "highlighted-match";
         mark.textContent = part;
-        mark.style.backgroundColor = "#ffeb3b";
+        mark.className = "highlighted-match";
+        mark.style.background = "#ffeb3b";
         matches.push(mark);
         frag.appendChild(mark);
       } else {
@@ -4102,7 +4108,7 @@ function searchHighlight() {
     });
 
     node.parentNode.replaceChild(frag, node);
-  }
+  });
 
   if (matches.length) {
     currentIndex = 0;
@@ -4114,10 +4120,11 @@ function searchHighlight() {
 }
 
 function clearHighlights() {
-  matches.forEach(el => {
-    const parent = el.parentNode;
-    parent.replaceChild(document.createTextNode(el.textContent), el);
-    parent.normalize(); // scal teksty
+  matches.forEach(mark => {
+    const parent = mark.parentNode;
+    if (!parent) return;
+    parent.replaceChild(document.createTextNode(mark.textContent), mark);
+    parent.normalize();
   });
   matches = [];
   document.getElementById("result-count").textContent = "0/0";
