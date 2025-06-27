@@ -4159,9 +4159,11 @@ function clearHighlights() {
       mark.parentNode.normalize();
     }
   });
+
   matches = [];
   currentIndex = 0;
   document.getElementById("result-count").textContent = "0/0";
+  document.getElementById("search-input").value = ""; // ← TO DODAJEMY
 }
 
 function updateCounter() {
