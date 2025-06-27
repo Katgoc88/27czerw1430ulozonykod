@@ -4080,38 +4080,35 @@ function searchHighlight() {
     }
   });
 
-  const nodesToProcess = [];
+  const nodes = [];
   let node;
   while (node = walker.nextNode()) {
-    nodesToProcess.push(node);
+    nodes.push(node);
   }
 
-  nodesToProcess.forEach(node => {
-    const text = node.nodeValue;
+  nodes.forEach(n => {
+    const text = n.nodeValue;
     const regex = new RegExp(`(${input})`, "gi");
     const parts = text.split(regex);
-
     if (parts.length < 2) return;
 
     const frag = document.createDocumentFragment();
     parts.forEach(part => {
       if (part.toLowerCase() === input) {
         const mark = document.createElement("mark");
-        mark.textContent = part;
         mark.className = "highlighted-match";
-        mark.style.background = "#ffeb3b";
-        mark.style.padding = "1px 2px";
+        mark.textContent = part;
+        mark.style.background = "#ffff00"; // żółty
         matches.push(mark);
         frag.appendChild(mark);
       } else {
         frag.appendChild(document.createTextNode(part));
       }
     });
-
-    node.parentNode.replaceChild(frag, node);
+    n.parentNode.replaceChild(frag, n);
   });
 
-  if (matches.length) {
+  if (matches.length > 0) {
     currentIndex = 0;
     updateCounter();
     highlightActive();
@@ -4121,20 +4118,14 @@ function searchHighlight() {
   }
 }
 
-function clearHighlights() {
-  matches.forEach(mark => {
-    const parent = mark.parentNode;
-    if (!parent) return;
-    parent.replaceChild(document.createTextNode(mark.textContent), mark);
-    parent.normalize();
-  });
-  matches = [];
-  document.getElementById("result-count").textContent = "0/0";
-}
-
 function highlightActive() {
-  matches.forEach((m, i) => {
-    m.style.outline = (i === currentIndex) ? "2px solid red" : "none";
+  matches.forEach((el, i) => {
+    el.style.background = "#ffff00"; // standardowy żółty
+    el.style.color = "black";
+    if (i === currentIndex) {
+      el.style.background = "red";
+      el.style.color = "white";
+    }
   });
 }
 
@@ -4158,6 +4149,19 @@ function prevMatch() {
   updateCounter();
   highlightActive();
   scrollToMatch();
+}
+
+function clearHighlights() {
+  matches.forEach(mark => {
+    const text = document.createTextNode(mark.textContent);
+    if (mark.parentNode) {
+      mark.parentNode.replaceChild(text, mark);
+      mark.parentNode.normalize();
+    }
+  });
+  matches = [];
+  currentIndex = 0;
+  document.getElementById("result-count").textContent = "0/0";
 }
 
 function updateCounter() {
