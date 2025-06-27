@@ -170,7 +170,9 @@ body {
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
   table-layout: fixed;
 }
-.katgo-projects-table :is(th, td) {
+
+.katgo-projects-table th, 
+.katgo-projects-table td {
   border: 1px solid #aebdc9;
   padding: 4px;
   vertical-align: middle;
@@ -178,28 +180,48 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.katgo-projects-table th { text-align: center; }
-.katgo-projects-table td { text-align: left; }
 
-.katgo-projects-table :is(th, td):nth-child(1),
-.katgo-projects-table :is(th, td):nth-child(2),
-.katgo-projects-table :is(th, td):nth-child(3),
-.katgo-projects-table :is(th, td):nth-child(4),
-.katgo-projects-table :is(th, td):nth-child(5) { width: 3%; }
-
-.katgo-projects-table :is(th, td):nth-child(6) { width: 20%; }
-.katgo-projects-table :is(th, td):nth-child(7) { width: 56%; }
-
-.katgo-projects-table :is(th, td):nth-child(8),
-.katgo-projects-table :is(th, td):nth-child(9),
-.katgo-projects-table :is(th, td):nth-child(10) { width: 3%; }
-
-/* 🔥 TO DODAJE KLIKWALNOŚĆ DO STRZAŁEK */
-.katgo-projects-table th[onclick] {
+.katgo-projects-table th {
+  text-align: center;
   cursor: pointer;
   user-select: none;
 }
+
+.katgo-projects-table td {
+  text-align: left;
+}
+
+/* Precyzyjne szerokości tylko dla tej tabeli */
+.katgo-projects-table th:nth-child(1),
+.katgo-projects-table td:nth-child(1),
+.katgo-projects-table th:nth-child(2),
+.katgo-projects-table td:nth-child(2),
+.katgo-projects-table th:nth-child(3),
+.katgo-projects-table td:nth-child(3),
+.katgo-projects-table th:nth-child(4),
+.katgo-projects-table td:nth-child(4),
+.katgo-projects-table th:nth-child(5),
+.katgo-projects-table td:nth-child(5),
+.katgo-projects-table th:nth-child(8),
+.katgo-projects-table td:nth-child(8),
+.katgo-projects-table th:nth-child(9),
+.katgo-projects-table td:nth-child(9),
+.katgo-projects-table th:nth-child(10),
+.katgo-projects-table td:nth-child(10) {
+  width: 3%;
+}
+
+.katgo-projects-table th:nth-child(6),
+.katgo-projects-table td:nth-child(6) {
+  width: 20%;
+}
+
+.katgo-projects-table th:nth-child(7),
+.katgo-projects-table td:nth-child(7) {
+  width: 56%;
+}
 </style>
+
 
 
 
