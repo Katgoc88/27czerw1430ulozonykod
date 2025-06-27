@@ -87,18 +87,18 @@ body {
 
     <!-- RESET -->
     <td style="width:8%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-      <button id="reset-all" style="padding:6px 12px; border-radius:6px; background:#f39c12; color:white; border:none; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.1);">RESET ALL</button>
+      <button id="reset-all" style="padding:10px 18px; font-size:16px; border-radius:8px; background:#f39c12; color:white; border:none; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.1);">RESET ALL</button>
     </td>
 
     <!-- WYSZUKIWARKA -->
     <td style="width:60%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-      <div id="search-box" style="display:flex; justify-content:center; align-items:center; gap:6px;">
-        <input id="search-input" type="text" placeholder="Szukaj..." style="padding:6px 10px; border:1px solid #ccc; border-radius:6px; font-size:14px; width:180px;">
-        <button onclick="searchHighlight()" style="padding:4px 8px;">🔍</button>
-        <button onclick="prevMatch()" style="padding:4px 8px;">⬅️</button>
-        <button onclick="nextMatch()" style="padding:4px 8px;">➡️</button>
-        <span id="result-count" style="font-size:14px; min-width:36px; text-align:center;">0/0</span>
-        <button onclick="clearHighlights()" style="padding:2px 8px; font-weight:bold; color:white; background:#e74c3c; border:none; border-radius:4px;">X</button>
+      <div id="search-box" style="display:flex; justify-content:center; align-items:center; gap:8px;">
+        <input id="search-input" type="text" placeholder="Szukaj..." style="flex:1; max-width:320px; padding:8px 12px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
+        <button onclick="searchHighlight()" style="padding:6px 10px;">🔍</button>
+        <button onclick="prevMatch()" style="padding:6px 10px;">⬅️</button>
+        <button onclick="nextMatch()" style="padding:6px 10px;">➡️</button>
+        <span id="result-count" style="font-size:15px; min-width:40px; text-align:center;">0/0</span>
+        <button onclick="clearHighlights()" style="padding:6px 10px; font-weight:bold; color:white; background:#e74c3c; border:none; border-radius:6px;">X</button>
       </div>
     </td>
 
@@ -145,11 +145,12 @@ body {
 
     <!-- WYLOGUJ -->
     <td style="width:8%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-      <button onclick="logout()" style="padding:6px 14px; border-radius:6px; background:#c0392b; color:white; border:none; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.1);">Wyloguj</button>
+      <button onclick="logout()" style="padding:10px 16px; font-size:15px; border-radius:8px; background:#c0392b; color:white; border:none; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.1);">Wyloguj</button>
     </td>
 
   </tr>
 </table>
+
 
 
 
