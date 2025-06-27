@@ -16,17 +16,13 @@ body {
   font-family: 'Segoe UI', sans-serif;
 }
 
-
-
-
-
-
-  
     
     .tooltip-icon {position: relative; cursor: pointer; font-weight: bold; display: inline-block;}
     .tooltip-text {visibility: hidden; background: #fff; color: #000; text-align: left; padding: 10px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.2); position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%); z-index: 1000; width: max-content; max-width: 200px; font-size: 12px; line-height: 1.4; white-space: normal;}
     .tooltip-icon.active .tooltip-text {visibility: visible;}
     body {font-family: sans-serif; padding: 20px;}
+
+   
     
     /* Kontener na obie tabele – elastyczny układ obok siebie */
     .tables-container {display: flex; gap: 20px; align-items: flex-start;} /* ✅ tabele będą równe tylko od góry */
@@ -71,7 +67,8 @@ body {
     .single-column-tables a:hover {text-decoration: underline;}
   </style></head>
 <body>
-  <div id="auth-overlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background:#000; display:flex; align-items:center; justify-content:center; z-index:9999;">
+
+ <div id="auth-overlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background:#000; display:flex; align-items:center; justify-content:center; z-index:9999;">
     <div style="text-align:center; background:#fff; padding:30px; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.3);">
       <h2>Enter Password</h2>
       <input type="password" id="password-input" style="padding:8px; margin-top:10px;" placeholder="••••••••"><br>
@@ -79,12 +76,50 @@ body {
       <p id="error-msg" style="color:red; display:none; margin-top:10px;">Wrong password.</p>
     </div> </div>
 
+
   
 
-  <button onclick="logout()" style="margin: 20px;">Wyloguj</button>
+<!-- ░░░░░░░░░░░░░░░░░░░░TU ZACZYNA SIĘ TO CO BĘDZIE WIDOCZNE NA STRONIE░░░░░░░░░░░░░░░░░░░░ -->
+
+
+  <!-- ░░░░░░░WIERSZ Z PRZYCISKAMI PRZYPIĘTY░░░░░░ -->
+<table style="position:fixed; top:0; left:0; width:100%; z-index:9999; border-collapse:collapse; background:linear-gradient(90deg, #dde7f2, #cadbe9); box-shadow:0 2px 10px rgba(0,0,0,0.1); font-family:'Segoe UI',sans-serif;">
+  <tr>
+    <td style="width:30%; padding:8px; text-align:center; vertical-align:middle; border:1px solid #aebdc9; color:#101820; text-shadow:0 1px 1px rgba(255,255,255,0.4); font-weight:bold;">
+       <button id="reset-all" style="padding:6px 14px; border-radius:6px; background:#f39c12; color:white; border:none; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.1);">RESET ALL</button>
+    
+     </td>
+   
+    <td style="width:60%; padding:8px; text-align:center; vertical-align:middle; border:1px solid #aebdc9; color:#101820; text-shadow:0 1px 1px rgba(255,255,255,0.4); font-weight:bold;">
+            <div id="search-box" style="position:fixed; top:60px; left:50%; transform:translateX(-50%); background:#dde7f2; padding:6px 12px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.15); z-index:9999; display:flex; align-items:center; gap:6px; font-family:'Segoe UI', sans-serif;">
+  <input id="search-input" type="text" placeholder="Szukaj..." style="padding:6px 10px; border:1px solid #ccc; border-radius:6px; font-size:14px; width:180px;">
+  <button onclick="searchHighlight()" style="padding:4px 8px; font-size:16px;">🔍</button>
+  <button onclick="prevMatch()" style="padding:4px 8px;">⬅️</button>
+  <button onclick="nextMatch()" style="padding:4px 8px;">➡️</button>
+  <span id="result-count" style="font-size:14px; min-width:36px; text-align:center;">0/0</span>
+  <button onclick="clearHighlights()" style="padding:2px 8px; font-weight:bold; color:white; background:#e74c3c; border:none; border-radius:4px;">X</button>
+</div>    </td>
+    
+    <td style="width:10%; padding:8px; text-align:center; vertical-align:middle; border:1px solid #aebdc9; color:#101820; text-shadow:0 1px 1px rgba(255,255,255,0.4); font-weight:bold;">
+       <button onclick="logout()" style="padding:6px 14px; border-radius:6px; background:#c0392b; color:white; border:none; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.1);">Wyloguj</button>
+
+  </tr>
+</table>
+
+
+
+
+
+
+  
+ 
+
   
 
-  <button class="reset-all" id="reset-all">RESET ALL</button>
+ 
+  
+
+ 
   <div class="tables-container">
 
 
@@ -3973,5 +4008,82 @@ function importDataByType(type, data) {
     document.getElementById("infoinfo-popup-detail").style.display = "none";
   }
 </script>
+
+
+
+
+
+
+  
+<script>
+let matches = [], currentIndex = 0;
+
+function searchHighlight() {
+  clearHighlights();
+  const term = document.getElementById("search-input").value.trim();
+  if (!term) return updateCounter();
+
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    if (!node.parentNode.closest('#search-box') && node.nodeValue.toLowerCase().includes(term.toLowerCase())) {
+      const span = document.createElement('span');
+      span.innerHTML = node.nodeValue.replace(new RegExp(`(${term})`, 'gi'), '<mark>$1</mark>');
+      node.parentNode.replaceChild(span, node);
+    }
+  }
+
+  matches = [...document.querySelectorAll('mark')];
+  currentIndex = 0;
+  scrollToMatch();
+  updateCounter();
+}
+
+function scrollToMatch() {
+  if (matches.length === 0) return;
+  matches.forEach(m => m.style.backgroundColor = '');
+  const active = matches[currentIndex];
+  active.scrollIntoView({ behavior: "smooth", block: "center" });
+  active.style.backgroundColor = "#ffec99";
+}
+
+function nextMatch() {
+  if (matches.length === 0) return;
+  currentIndex = (currentIndex + 1) % matches.length;
+  scrollToMatch();
+  updateCounter();
+}
+
+function prevMatch() {
+  if (matches.length === 0) return;
+  currentIndex = (currentIndex - 1 + matches.length) % matches.length;
+  scrollToMatch();
+  updateCounter();
+}
+
+function clearHighlights() {
+  matches.forEach(mark => {
+    const textNode = document.createTextNode(mark.textContent);
+    mark.parentNode.replaceChild(textNode, mark);
+  });
+  matches = [];
+  currentIndex = 0;
+  updateCounter();
+  document.getElementById("search-input").value = "";
+}
+
+function updateCounter() {
+  const display = document.getElementById("result-count");
+  if (matches.length === 0) {
+    display.textContent = "0/0";
+  } else {
+    display.textContent = `${currentIndex + 1}/${matches.length}`;
+  }
+}
+</script>
+
+
+
+  
 </body>
 </html>
