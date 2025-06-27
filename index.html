@@ -88,16 +88,18 @@ body {
       <button id="reset-all" style="padding:10px 18px; font-size:16px; border-radius:8px; background:#f39c12; color:white; border:none; font-weight:bold;">RESET ALL</button>
     </td>
    
-    <td style="width:90%; padding:6px; border:1px solid #aebdc9;">
-      <div id="search-box" style="display:flex; align-items:center; gap:8px;">
-        <input id="search-input" type="text" placeholder="Szukaj..." style="flex:1; max-width:500px; padding:8px 12px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
-        <button onclick="searchHighlight()">🔍</button>
-        <button onclick="prevMatch()">⬅️</button>
-        <button onclick="nextMatch()">➡️</button>
-        <span id="result-count" style="min-width:40px; text-align:center;">0/0</span>
-        <button onclick="clearHighlights()" style="padding:6px 10px; font-weight:bold; color:white; background:#e74c3c; border:none; border-radius:6px;">X</button>
-      </div>
-    </td>
+    <!-- WYSZUKIWARKA -->
+<td style="width:60%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
+  <div id="search-box" style="display:flex; justify-content:center; align-items:center; gap:8px;">
+    <input id="search-input" type="text" placeholder="Szukaj..." style="flex:1; max-width:400px; padding:8px 12px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
+    <button onclick="searchHighlight()">🔍</button>
+    <button onclick="prevMatch()">⬅️</button>
+    <button onclick="nextMatch()">➡️</button>
+    <span id="result-count" style="font-size:15px; min-width:40px; text-align:center;">0/0</span>
+    <button onclick="clearHighlights()" style="padding:6px 10px; font-weight:bold; color:white; background:#e74c3c; border:none; border-radius:6px;">X</button>
+  </div>
+</td>
+
       
 
     <!-- EKSPORT JSON -->
@@ -4063,15 +4065,12 @@ function importDataByType(type, data) {
 
   
 <script>
-let highlights = [];
-let current = 0;
+let highlights = [], current = 0;
 
 function clearHighlights() {
-  highlights.forEach(el => {
-    const parent = el.parentNode;
-    if (!parent) return;
-    parent.replaceChild(document.createTextNode(el.textContent), el);
-    parent.normalize();
+  highlights.forEach(({ span, text, parent }) => {
+    if (!span || !parent) return;
+    parent.replaceChild(document.createTextNode(text), span);
   });
   highlights = [];
   updateCounter();
@@ -4079,41 +4078,36 @@ function clearHighlights() {
 
 function searchHighlight() {
   clearHighlights();
-  const term = document.getElementById("search-input").value.trim().toLowerCase();
-  if (!term) return;
+  const input = document.getElementById("search-input").value.trim().toLowerCase();
+  if (!input) return;
 
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-  while (walker.nextNode()) {
-    const node = walker.currentNode;
-    if (!node.parentElement || ['SCRIPT', 'STYLE', 'TEXTAREA'].includes(node.parentElement.tagName)) continue;
+  let node;
+  while ((node = walker.nextNode())) {
+    const parent = node.parentNode;
+    if (!parent || ['SCRIPT', 'STYLE'].includes(parent.tagName)) continue;
 
-    const text = node.textContent;
-    const matches = [];
-    let index = text.toLowerCase().indexOf(term);
-    while (index !== -1) {
-      matches.push(index);
-      index = text.toLowerCase().indexOf(term, index + term.length);
-    }
+    const text = node.nodeValue;
+    const lcText = text.toLowerCase();
+    let pos = 0;
+    while ((pos = lcText.indexOf(input, pos)) !== -1) {
+      const before = document.createTextNode(text.slice(0, pos));
+      const match = document.createTextNode(text.slice(pos, pos + input.length));
+      const after = document.createTextNode(text.slice(pos + input.length));
 
-    if (matches.length > 0) {
-      const parent = node.parentNode;
-      let lastIndex = 0;
+      const span = document.createElement("span");
+      span.className = "highlighted";
+      span.style.backgroundColor = "yellow";
+      span.appendChild(match);
 
-      matches.forEach((matchIndex, i) => {
-        const before = document.createTextNode(text.slice(lastIndex, matchIndex));
-        const span = document.createElement("span");
-        span.className = "highlighted";
-        span.style.backgroundColor = "yellow";
-        span.textContent = text.slice(matchIndex, matchIndex + term.length);
-        highlights.push(span);
-        parent.insertBefore(before, node);
-        parent.insertBefore(span, node);
-        lastIndex = matchIndex + term.length;
-      });
-
-      const after = document.createTextNode(text.slice(lastIndex));
+      parent.insertBefore(before, node);
+      parent.insertBefore(span, node);
       parent.insertBefore(after, node);
       parent.removeChild(node);
+
+      highlights.push({ span, text: match.nodeValue, parent });
+      node = after;
+      pos = 0;
     }
   }
 
@@ -4126,9 +4120,9 @@ function searchHighlight() {
 
 function updateHighlight() {
   highlights.forEach((el, i) => {
-    el.style.backgroundColor = (i === current) ? "orange" : "yellow";
+    el.span.style.backgroundColor = (i === current) ? "orange" : "yellow";
   });
-  highlights[current].scrollIntoView({ behavior: "smooth", block: "center" });
+  highlights[current].span.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function nextMatch() {
@@ -4147,10 +4141,10 @@ function prevMatch() {
 
 function updateCounter() {
   const el = document.getElementById("result-count");
-  if (highlights.length === 0) el.textContent = "0/0";
-  else el.textContent = `${current + 1}/${highlights.length}`;
+  el.textContent = highlights.length === 0 ? "0/0" : `${current + 1}/${highlights.length}`;
 }
 </script>
+
 
 
 
