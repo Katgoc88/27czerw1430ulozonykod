@@ -4100,6 +4100,7 @@ function searchHighlight() {
         mark.textContent = part;
         mark.className = "highlighted-match";
         mark.style.background = "#ffeb3b";
+        mark.style.padding = "1px 2px";
         matches.push(mark);
         frag.appendChild(mark);
       } else {
@@ -4113,6 +4114,7 @@ function searchHighlight() {
   if (matches.length) {
     currentIndex = 0;
     updateCounter();
+    highlightActive();
     scrollToMatch();
   } else {
     document.getElementById("result-count").textContent = "0/0";
@@ -4130,6 +4132,12 @@ function clearHighlights() {
   document.getElementById("result-count").textContent = "0/0";
 }
 
+function highlightActive() {
+  matches.forEach((m, i) => {
+    m.style.outline = (i === currentIndex) ? "2px solid red" : "none";
+  });
+}
+
 function scrollToMatch() {
   if (matches.length > 0) {
     matches[currentIndex].scrollIntoView({ behavior: "smooth", block: "center" });
@@ -4140,6 +4148,7 @@ function nextMatch() {
   if (!matches.length) return;
   currentIndex = (currentIndex + 1) % matches.length;
   updateCounter();
+  highlightActive();
   scrollToMatch();
 }
 
@@ -4147,6 +4156,7 @@ function prevMatch() {
   if (!matches.length) return;
   currentIndex = (currentIndex - 1 + matches.length) % matches.length;
   updateCounter();
+  highlightActive();
   scrollToMatch();
 }
 
@@ -4154,6 +4164,7 @@ function updateCounter() {
   document.getElementById("result-count").textContent = `${currentIndex + 1}/${matches.length}`;
 }
 </script>
+
 
 
 
