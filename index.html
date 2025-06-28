@@ -81,9 +81,9 @@ body {
 
 <!-- ░░░░░░░░░░░░░░░░░░░░TU ZACZYNA SIĘ TO CO BĘDZIE WIDOCZNE NA STRONIE░░░░░░░░░░░░░░░░░░░░ -->
   
-<!-- ░░░░░GÓRNY PASEK (sticky, przewijalny)░░░░░ -->
-<div style="overflow-x: auto;">
-  <table style="min-width: 1200px; position: sticky; top: 0; left: 0; z-index: 9999; border-collapse: collapse; background: linear-gradient(90deg, #dde7f2, #cadbe9); box-shadow: 0 2px 10px rgba(0,0,0,0.1); font-family: 'Segoe UI', sans-serif;">
+<!-- ░░░░░GÓRNY PASEK (fixed + przewijalny poziomo)░░░░░ -->
+<div style="position: fixed; top: 0; left: 0; width: 100vw; z-index: 9999; overflow-x: auto; background: linear-gradient(90deg, #dde7f2, #cadbe9); box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+  <table style="min-width: 1200px; border-collapse: collapse; font-family: 'Segoe UI', sans-serif;">
     <tr>
       <td style="width: 8%; padding: 6px; text-align: center; border: 1px solid #aebdc9;">
         <button id="reset-all" style="padding: 10px 18px; font-size: 16px; border-radius: 8px; background: #f39c12; color: white; border: none; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">RESET ALL</button>
@@ -99,7 +99,6 @@ body {
         </div>
       </td>
 
-      <!-- EKSPORT JSON -->
       <td style="width: 8%; padding: 6px; text-align: center; vertical-align: middle; border: 1px solid #aebdc9;">
         <div style="border: 1px solid #aebdc9; border-radius: 8px; padding: 4px;">
           <div style="font-size: 12px; font-weight: bold; margin-bottom: 4px;">Eksport JSON</div>
@@ -114,7 +113,6 @@ body {
         </div>
       </td>
 
-      <!-- EKSPORT DO PLIKU -->
       <td style="width: 8%; padding: 6px; text-align: center; vertical-align: middle; border: 1px solid #aebdc9;">
         <div style="border: 1px solid #aebdc9; border-radius: 8px; padding: 4px;">
           <div style="font-size: 12px; font-weight: bold; margin-bottom: 4px;">Eksport</div>
@@ -127,7 +125,6 @@ body {
         </div>
       </td>
 
-      <!-- IMPORT Z PLIKU -->
       <td style="width: 8%; padding: 6px; text-align: center; vertical-align: middle; border: 1px solid #aebdc9;">
         <div style="border: 1px solid #aebdc9; border-radius: 8px; padding: 4px;">
           <div style="font-size: 12px; font-weight: bold; margin-bottom: 4px;">Import</div>
@@ -140,7 +137,6 @@ body {
         </div>
       </td>
 
-      <!-- WYLOGUJ -->
       <td style="width: 8%; padding: 6px; text-align: center; vertical-align: middle; border: 1px solid #aebdc9;">
         <button onclick="logout()" style="padding: 10px 16px; font-size: 15px; border-radius: 8px; background: #c0392b; color: white; border: none; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Wyloguj</button>
       </td>
