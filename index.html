@@ -56,10 +56,10 @@ body {
   
 
 <!-- ░░░░░░░░░░░░░░░░░░░░TU ZACZYNA SIĘ TO CO BĘDZIE WIDOCZNE NA STRONIE░░░░░░░░░░░░░░░░░░░░ -->
-  
+
 <!-- ░░░░░GÓRNY PASEK (fixed + przewijalny poziomo)░░░░░ -->
-<div style="position: fixed; top: 0; left: 0; width: 100vw; z-index: 9999; overflow-x: auto; background: linear-gradient(90deg, #dde7f2, #cadbe9); box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-  <table style="min-width: 1200px; border-collapse: collapse; font-family: 'Segoe UI', sans-serif;">
+<div style="position: fixed; top: 0; left: 0; width: 100%; z-index: 9999; overflow-x: auto; background: linear-gradient(90deg, #dde7f2, #cadbe9); box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+  <table style="min-width: 1200px; width: 100%; border-collapse: collapse; font-family: 'Segoe UI', sans-serif;">
     <tr>
       <td style="width: 8%; padding: 6px; text-align: center; border: 1px solid #aebdc9;">
         <button id="reset-all" style="padding: 10px 18px; font-size: 16px; border-radius: 8px; background: #f39c12; color: white; border: none; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">RESET ALL</button>
@@ -120,21 +120,10 @@ body {
   </table>
 </div>
 
+<br><br><br><br><br><br>
 
-<br>
-  <br>
-  <br>
-<br>
-  <br>
-  <br>
+<!-- ░░░░░░░░░░░░░░░░░░░░TU ZACZYNA SIĘ GŁÓWNY KONTENER░░░░░░░░░░░░░░░░░░░░ -->
 
-
-
-
-  
-<!-- ░░░░░░░░░░░░░░░░░░░░TU ZACZYNA SIĘ GŁÓWNY KONTENER░░░░░░░░░░░░░░░░░░░ -->
-
-<!-- ░░░░░STYL░░░░░░░░ TABELA: katgo-table-2x2 ░░░░░░░░░░░░░░░░░░░░ -->
 <style>
 .katgo-table-2x2 {
   width: 100%;
@@ -149,15 +138,9 @@ body {
   text-align: center;
   vertical-align: middle;
 }
-.katgo-table-2x2 td:first-child {
-  width: 70%;
-}
-.katgo-table-2x2 td:last-child {
-  width: 30%;
-}
-</style>
+.katgo-table-2x2 td:first-child { width: 70%; }
+.katgo-table-2x2 td:last-child  { width: 30%; }
 
- <style>
 @media screen and (max-width: 768px) {
   .katgo-table-2x2,
   .katgo-table-2x2 tr,
@@ -167,13 +150,10 @@ body {
   }
 }
 </style>
- 
 
-<!-- ░░░░░░░░░░░░░░░ TABELA: katgo-table-2x2 ░░░░░░░░░░░░░░░░░░ -->
 <table class="katgo-table-2x2">
   <tr>
     <td>
-      <!-- ░░░░░░░░░░STYLE░░░░ TABELA: katgo-projects-table ░░░░░░░░░░ -->
       <style>
       .katgo-projects-table {
         width: 100%;
@@ -182,9 +162,7 @@ body {
         box-shadow: 0 1px 4px rgba(0,0,0,0.1);
         table-layout: fixed;
       }
-
-      .katgo-projects-table th,
-      .katgo-projects-table td {
+      .katgo-projects-table th, .katgo-projects-table td {
         border: 1px solid #aebdc9;
         padding: 4px;
         vertical-align: middle;
@@ -192,7 +170,6 @@ body {
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-
       .katgo-projects-table th {
         text-align: center;
         cursor: pointer;
@@ -200,79 +177,42 @@ body {
         font-size: 16px;
         padding: 6px 10px;
       }
+      .katgo-projects-table td { text-align: center; }
+      .katgo-projects-table td:nth-child(6),
+      .katgo-projects-table td:nth-child(7) { text-align: left; }
 
-      .katgo-projects-table td {
-  text-align: center;
-}
+      .katgo-projects-table th:nth-child(1),  .katgo-projects-table td:nth-child(1)  { width: 54px; }
+      .katgo-projects-table th:nth-child(2),  .katgo-projects-table td:nth-child(2)  { width: 36px; }
+      .katgo-projects-table th:nth-child(3),  .katgo-projects-table td:nth-child(3)  { width: 54px; }
+      .katgo-projects-table th:nth-child(4),  .katgo-projects-table td:nth-child(4)  { width: 78px; }
+      .katgo-projects-table th:nth-child(5),  .katgo-projects-table td:nth-child(5)  { width: 66px; }
+      .katgo-projects-table th:nth-child(6),  .katgo-projects-table td:nth-child(6)  { width: 212px; }
+      .katgo-projects-table th:nth-child(7),  .katgo-projects-table td:nth-child(7)  { width: 696px; }
+      .katgo-projects-table th:nth-child(8),  .katgo-projects-table td:nth-child(8)  { width: 1px; }
+      .katgo-projects-table th:nth-child(9),  .katgo-projects-table td:nth-child(9)  { width: 1px; }
+      .katgo-projects-table th:nth-child(10), .katgo-projects-table td:nth-child(10) { width: 1px; }
 
-.katgo-projects-table td:nth-child(6),
-.katgo-projects-table td:nth-child(7) {
-  text-align: left;
-}
-
-
-     .katgo-projects-table th:nth-child(1),
-.katgo-projects-table td:nth-child(1) {
-  width: 54px;
-}
-
-.katgo-projects-table th:nth-child(2),
-.katgo-projects-table td:nth-child(2) {
-  width: 36px;
-}
-
-.katgo-projects-table th:nth-child(3),
-.katgo-projects-table td:nth-child(3) {
-  width: 54px;
-}
-
-.katgo-projects-table th:nth-child(4),
-.katgo-projects-table td:nth-child(4) {
-  width: 78px;
-}
-
-.katgo-projects-table th:nth-child(5),
-.katgo-projects-table td:nth-child(5) {
-  width: 66px;
-}
-
-.katgo-projects-table th:nth-child(6),
-.katgo-projects-table td:nth-child(6) {
-  width: 212px;
-}
-
-.katgo-projects-table th:nth-child(7),
-.katgo-projects-table td:nth-child(7) {
-  width: 696px;
-}
-
-.katgo-projects-table th:nth-child(8),
-.katgo-projects-table td:nth-child(8) {
-  width: 1px;
-}
-
-.katgo-projects-table th:nth-child(9),
-.katgo-projects-table td:nth-child(9) {
-  width: 1px;
-}
-
-.katgo-projects-table th:nth-child(10),
-.katgo-projects-table td:nth-child(10) {
-  width: 1px;
-}
-
-
+      .header-icon-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.2;
+      }
+      .sort-arrows {
+        font-size: 12px;
+        margin-top: 2px;
+      }
       </style>
 
-      <!-- ░░░░░░░░░░░ TABELA: katgo-projects-table ░░░░░░░░░░ -->
       <table class="katgo-projects-table" id="katgo-projects-table">
         <thead>
           <tr>
-            <th onclick="sortTable(0)">📱/💻 ↑↓</th>
-            <th onclick="sortTable(1)">🕒 ↑↓</th>
-            <th onclick="sortTable(2)">📅 ↑↓</th>
-            <th onclick="sortTable(3)">🏷️ ↑↓</th>
-            <th onclick="sortTable(4)">🗂️ ↑↓</th>
+            <th onclick="sortTable(0)"><div class="header-icon-stack"><span>📱/💻</span><span class="sort-arrows">↑↓</span></div></th>
+            <th onclick="sortTable(1)"><div class="header-icon-stack"><span>🕒</span><span class="sort-arrows">↑↓</span></div></th>
+            <th onclick="sortTable(2)"><div class="header-icon-stack"><span>📅</span><span class="sort-arrows">↑↓</span></div></th>
+            <th onclick="sortTable(3)"><div class="header-icon-stack"><span>🏷️</span><span class="sort-arrows">↑↓</span></div></th>
+            <th onclick="sortTable(4)"><div class="header-icon-stack"><span>🗂️</span><span class="sort-arrows">↑↓</span></div></th>
             <th onclick="sortTable(5)">PROJEKTY ↑↓</th>
             <th>CHECKBOXY</th>
             <th onclick="sortTable(7)">↑↓</th>
@@ -281,8 +221,6 @@ body {
           </tr>
         </thead>
         <tbody>
-
-
 
 
           <!--------------------------------- SAHARA ---------------------------->
@@ -1595,9 +1533,9 @@ To wszystko! Teraz czekamy na zakończenie kampanii i airdrop.`}])">ℹ️</span
       </table>
     </td>
     <!-- ---------------------------------------------------------------------- --><!-- ---------------------------------------------------------------------- --><!-- ---------------------------------------------------------------------- -->
-    <td style="text-align: left; vertical-align: top;">
+   <!-- ░░░░░░░░░░░░ PRAWA KOLUMNA ░░░░░░░░░░░░ -->
+<td style="text-align: left; vertical-align: top;">
   <div style="padding: 16px;">
-    <!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ KALENDARZE ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
     <div style="width: 100%; max-width: 700px; margin: 0 auto; text-align: left;">
       <h3 style="text-align:center;">💻 KALENDARZ KOMPUTER (OGÓLNY)</h3>
       <div style="text-align:center; margin-bottom: 10px;">
@@ -1610,11 +1548,11 @@ To wszystko! Teraz czekamy na zakończenie kampanii i airdrop.`}])">ℹ️</span
   </div>
 </td>
 
-  </tr>
-  <tr>
-    <td>Wiersz 2, kolumna 1</td>
-    <td>Wiersz 2, kolumna 2</td>
-  </tr>
+</tr>
+<tr>
+  <td>Wiersz 2, kolumna 1</td>
+  <td>Wiersz 2, kolumna 2</td>
+</tr>
 </table>
 <!-- ░░░░░KONIEC░░░░░░░░░░ TABELA: katgo-table-2x2 ░░░░KONIEC░░░░░░░░░░░░░░ -->
 
