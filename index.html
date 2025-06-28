@@ -4410,8 +4410,13 @@ function sortTable(n) {
   const table = document.getElementById("katgo-projects-table");
   const tbody = table.tBodies[0];
   const rows = Array.from(tbody.rows);
-  const isNumber = val => !isNaN(parseFloat(val)) && isFinite(val);
   const key = "katgo-sort";
+
+  // 🔧 Dodana funkcja: wyciąga liczbę z początku tekstu
+  const extractNumber = val => {
+    const match = val.trim().match(/^[-+]?[\d.,]+/);
+    return match ? parseFloat(match[0].replace(",", ".")) : NaN;
+  };
 
   let direction = localStorage.getItem(key + "-dir") === "asc" ? "desc" : "asc";
   localStorage.setItem(key + "-col", n);
@@ -4420,9 +4425,16 @@ function sortTable(n) {
   rows.sort((a, b) => {
     const aText = a.cells[n].textContent.trim();
     const bText = b.cells[n].textContent.trim();
-    const aVal = isNumber(aText) ? parseFloat(aText) : aText.toLowerCase();
-    const bVal = isNumber(bText) ? parseFloat(bText) : bText.toLowerCase();
 
+    const aNum = extractNumber(aText);
+    const bNum = extractNumber(bText);
+
+    if (!isNaN(aNum) && !isNaN(bNum)) {
+      return direction === "asc" ? aNum - bNum : bNum - aNum;
+    }
+
+    const aVal = aText.toLowerCase();
+    const bVal = bText.toLowerCase();
     if (aVal < bVal) return direction === "asc" ? -1 : 1;
     if (aVal > bVal) return direction === "asc" ? 1 : -1;
     return 0;
@@ -4441,6 +4453,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 </script>
+
 
 
 
