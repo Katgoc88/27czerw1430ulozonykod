@@ -80,71 +80,73 @@ body {
   
 
 <!-- ░░░░░░░░░░░░░░░░░░░░TU ZACZYNA SIĘ TO CO BĘDZIE WIDOCZNE NA STRONIE░░░░░░░░░░░░░░░░░░░░ -->
-<table style="position:fixed; top:0; left:0; width:100%; z-index:9999; border-collapse:collapse; background:linear-gradient(90deg, #dde7f2, #cadbe9); box-shadow:0 2px 10px rgba(0,0,0,0.1); font-family:'Segoe UI',sans-serif;">
-  <tr>
-    <td style="width:8%; padding:6px; text-align:center; border:1px solid #aebdc9;">
-      <button id="reset-all" style="padding:10px 18px; font-size:16px; border-radius:8px; background:#f39c12; color:white; border:none; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.1);">RESET ALL</button>
-    </td>
-    <td style="width:60%; padding:6px; border:1px solid #aebdc9;">
-      <div id="search-box" style="display:flex; align-items:center; gap:8px;">
-        <input id="search-input" type="text" placeholder="Szukaj..." style="flex:1; max-width:420px; padding:8px 12px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
-        <button onclick="searchHighlight()">🔍</button>
-        <button onclick="prevMatch()">⬅️</button>
-        <button onclick="nextMatch()">➡️</button>
-        <span id="result-count" style="font-size:15px; min-width:40px; text-align:center;">0/0</span>
-        <button onclick="clearHighlights()" style="font-weight:bold; color:white; background:#e74c3c; border:none; border-radius:6px;">X</button>
-      </div>
-    </td>
-       
-
-    <!-- EKSPORT JSON -->
-    <td style="width:8%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-      <div style="border:1px solid #aebdc9; border-radius:8px; padding:4px;">
-        <div style="font-size:12px; font-weight:bold; margin-bottom:4px;">Eksport JSON</div>
-        <div style="display:flex; align-items:center; gap:4px;">
-          <textarea id="exportOutput" placeholder="..." style="height:28px; width:160px; font-size:13px; padding:4px 6px; border-radius:6px; border:1px solid #ccc; resize:none;"></textarea>
-          <button onclick="copyExportJSON()" style="padding:4px;">📋</button>
-          <button onclick="clearExportJSON()" style="padding:4px;">❌</button>
-          <button onclick="exportCheckCopy()" style="padding:4px;">☑️</button>
-          <button onclick="exportAllNotesCopy()" style="padding:4px;">📝</button>
-          <button onclick="exportAllCopy()" style="padding:4px;">📦</button>
+  
+<!-- ░░░░░GÓRNY PASEK (sticky, przewijalny)░░░░░ -->
+<div style="overflow-x: auto;">
+  <table style="min-width: 1200px; position: sticky; top: 0; left: 0; z-index: 9999; border-collapse: collapse; background: linear-gradient(90deg, #dde7f2, #cadbe9); box-shadow: 0 2px 10px rgba(0,0,0,0.1); font-family: 'Segoe UI', sans-serif;">
+    <tr>
+      <td style="width: 8%; padding: 6px; text-align: center; border: 1px solid #aebdc9;">
+        <button id="reset-all" style="padding: 10px 18px; font-size: 16px; border-radius: 8px; background: #f39c12; color: white; border: none; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">RESET ALL</button>
+      </td>
+      <td style="width: 60%; padding: 6px; border: 1px solid #aebdc9;">
+        <div id="search-box" style="display: flex; align-items: center; gap: 8px;">
+          <input id="search-input" type="text" placeholder="Szukaj..." style="flex: 1; max-width: 420px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+          <button onclick="searchHighlight()">🔍</button>
+          <button onclick="prevMatch()">⬅️</button>
+          <button onclick="nextMatch()">➡️</button>
+          <span id="result-count" style="font-size: 15px; min-width: 40px; text-align: center;">0/0</span>
+          <button onclick="clearHighlights()" style="font-weight: bold; color: white; background: #e74c3c; border: none; border-radius: 6px;">X</button>
         </div>
-      </div>
-    </td>
+      </td>
 
-    <!-- EKSPORT DO PLIKU -->
-    <td style="width:8%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-      <div style="border:1px solid #aebdc9; border-radius:8px; padding:4px;">
-        <div style="font-size:12px; font-weight:bold; margin-bottom:4px;">Eksport</div>
-        <div style="display:flex; align-items:center; gap:4px;">
-          <input type="file" id="fileInputExport" style="font-size:13px;">
-          <button onclick="exportCheck()" style="padding:4px;">☑️</button>
-          <button onclick="exportAllNotes()" style="padding:4px;">📝</button>
-          <button onclick="exportAll()" style="padding:4px;">📦</button>
+      <!-- EKSPORT JSON -->
+      <td style="width: 8%; padding: 6px; text-align: center; vertical-align: middle; border: 1px solid #aebdc9;">
+        <div style="border: 1px solid #aebdc9; border-radius: 8px; padding: 4px;">
+          <div style="font-size: 12px; font-weight: bold; margin-bottom: 4px;">Eksport JSON</div>
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <textarea id="exportOutput" placeholder="..." style="height: 28px; width: 160px; font-size: 13px; padding: 4px 6px; border-radius: 6px; border: 1px solid #ccc; resize: none;"></textarea>
+            <button onclick="copyExportJSON()" style="padding: 4px;">📋</button>
+            <button onclick="clearExportJSON()" style="padding: 4px;">❌</button>
+            <button onclick="exportCheckCopy()" style="padding: 4px;">☑️</button>
+            <button onclick="exportAllNotesCopy()" style="padding: 4px;">📝</button>
+            <button onclick="exportAllCopy()" style="padding: 4px;">📦</button>
+          </div>
         </div>
-      </div>
-    </td>
+      </td>
 
-    <!-- IMPORT Z PLIKU -->
-    <td style="width:8%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-      <div style="border:1px solid #aebdc9; border-radius:8px; padding:4px;">
-        <div style="font-size:12px; font-weight:bold; margin-bottom:4px;">Import</div>
-        <div style="display:flex; align-items:center; gap:4px;">
-          <input type="file" id="fileInput" style="font-size:13px;">
-          <button onclick="importFromFile('check')" style="padding:4px;">☑️</button>
-          <button onclick="importFromFile('notes-all')" style="padding:4px;">📝</button>
-          <button onclick="importFromFile('all')" style="padding:4px;">📦</button>
+      <!-- EKSPORT DO PLIKU -->
+      <td style="width: 8%; padding: 6px; text-align: center; vertical-align: middle; border: 1px solid #aebdc9;">
+        <div style="border: 1px solid #aebdc9; border-radius: 8px; padding: 4px;">
+          <div style="font-size: 12px; font-weight: bold; margin-bottom: 4px;">Eksport</div>
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <input type="file" id="fileInputExport" style="font-size: 13px;">
+            <button onclick="exportCheck()" style="padding: 4px;">☑️</button>
+            <button onclick="exportAllNotes()" style="padding: 4px;">📝</button>
+            <button onclick="exportAll()" style="padding: 4px;">📦</button>
+          </div>
         </div>
-      </div>
-    </td>
+      </td>
 
-    <!-- WYLOGUJ -->
-    <td style="width:8%; padding:6px; text-align:center; vertical-align:middle; border:1px solid #aebdc9;">
-      <button onclick="logout()" style="padding:10px 16px; font-size:15px; border-radius:8px; background:#c0392b; color:white; border:none; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.1);">Wyloguj</button>
-    </td>
+      <!-- IMPORT Z PLIKU -->
+      <td style="width: 8%; padding: 6px; text-align: center; vertical-align: middle; border: 1px solid #aebdc9;">
+        <div style="border: 1px solid #aebdc9; border-radius: 8px; padding: 4px;">
+          <div style="font-size: 12px; font-weight: bold; margin-bottom: 4px;">Import</div>
+          <div style="display: flex; align-items: center; gap: 4px;">
+            <input type="file" id="fileInput" style="font-size: 13px;">
+            <button onclick="importFromFile('check')" style="padding: 4px;">☑️</button>
+            <button onclick="importFromFile('notes-all')" style="padding: 4px;">📝</button>
+            <button onclick="importFromFile('all')" style="padding: 4px;">📦</button>
+          </div>
+        </div>
+      </td>
 
-  </tr>
-</table>
+      <!-- WYLOGUJ -->
+      <td style="width: 8%; padding: 6px; text-align: center; vertical-align: middle; border: 1px solid #aebdc9;">
+        <button onclick="logout()" style="padding: 10px 16px; font-size: 15px; border-radius: 8px; background: #c0392b; color: white; border: none; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Wyloguj</button>
+      </td>
+    </tr>
+  </table>
+</div>
 
 
 <br>
@@ -237,55 +239,56 @@ body {
 }
 
 
-      .katgo-projects-table th:nth-child(1),
+     .katgo-projects-table th:nth-child(1),
 .katgo-projects-table td:nth-child(1) {
-  width: 4.5%;
+  width: 54px;
 }
 
 .katgo-projects-table th:nth-child(2),
 .katgo-projects-table td:nth-child(2) {
-  width: 3%;
+  width: 36px;
 }
 
 .katgo-projects-table th:nth-child(3),
 .katgo-projects-table td:nth-child(3) {
-  width: 4.5%;
+  width: 54px;
 }
 
 .katgo-projects-table th:nth-child(4),
 .katgo-projects-table td:nth-child(4) {
-  width: 6.5%;
+  width: 78px;
 }
 
 .katgo-projects-table th:nth-child(5),
 .katgo-projects-table td:nth-child(5) {
-  width: 5.5%;
+  width: 66px;
 }
 
 .katgo-projects-table th:nth-child(6),
 .katgo-projects-table td:nth-child(6) {
-  width: 17.7%;
+  width: 212px;
 }
 
 .katgo-projects-table th:nth-child(7),
 .katgo-projects-table td:nth-child(7) {
-  width: 58%;
+  width: 696px;
 }
 
 .katgo-projects-table th:nth-child(8),
 .katgo-projects-table td:nth-child(8) {
-  width: 0.1%;
+  width: 1px;
 }
 
 .katgo-projects-table th:nth-child(9),
 .katgo-projects-table td:nth-child(9) {
-  width: 0.1%;
+  width: 1px;
 }
 
 .katgo-projects-table th:nth-child(10),
 .katgo-projects-table td:nth-child(10) {
-  width: 0.1%;
+  width: 1px;
 }
+
 
       </style>
 
